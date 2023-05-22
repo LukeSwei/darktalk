@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luke.darktalk.mapper.MsgLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.luke.darktalk.model.domain.MsgLog">
+            <id property="msgId" column="msg_id" jdbcType="VARCHAR"/>
+            <result property="msg" column="msg" jdbcType="VARCHAR"/>
+            <result property="exchange" column="exchange" jdbcType="VARCHAR"/>
+            <result property="routingKey" column="routing_key" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="tryCount" column="try_count" jdbcType="INTEGER"/>
+            <result property="nextTryTime" column="next_try_time" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        msg_id,msg,exchange,
+        routing_key,status,try_count,
+        next_try_time,create_time,update_time
+    </sql>
+    <update id="updateStatusById">
+        update msg_log set status=#{status},update_time = now() where msg_id = #{msgId}
+    </update>
+    <update id="updateTryCount">
+        update msg_log set try_count = try_count + 1, next_try_time = #{nextTryTime}, update_time = now()
+        where msg_id = #{msgId}
+    </update>
+
+    <select id="selectTimeoutMsg" resultType="com.luke.darktalk.model.domain.MsgLog">
+        select <include refid="Base_Column_List"/>
+        from msg_log
+        where status = 0
+        and next_try_time &lt;= now()
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from msg_log
+        where msg_id = #{msgId,jdbcType=VARCHAR}
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luke.darktalk.mapper.BuddyListMapper">
+
+    <resultMap id="BaseResultMap" type="com.luke.darktalk.model.domain.BuddyList">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="mineId" column="mineId" jdbcType="INTEGER"/>
+            <result property="friendId" column="friendId" jdbcType="INTEGER"/>
+            <result property="friendName" column="friendName" jdbcType="VARCHAR"/>
+            <result property="friendAvatarUrl" column="friendAvatarUrl" jdbcType="INTEGER"/>
+            <result property="noteName" column="noteName" jdbcType="INTEGER"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,mineId,friendId,
+        friendName,friendAvatarUrl,noteName,
+        createTime,updateTime,isDelete
+    </sql>
+</mapper>

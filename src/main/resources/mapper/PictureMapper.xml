@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luke.darktalk.mapper.PictureMapper">
+
+    <resultMap id="BaseResultMap" type="com.luke.darktalk.model.domain.Picture">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="momentId" column="momentId" jdbcType="VARCHAR"/>
+            <result property="pictureUrl" column="pictureUrl" jdbcType="VARCHAR"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="createBy" column="createBy" jdbcType="VARCHAR"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="updateBy" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,momentId,pictureUrl,
+        userId,createBy,createTime,
+        updateBy,updateTime,isDelete
+    </sql>
+    <select id="listUrl" resultType="com.luke.darktalk.model.vo.PictureVo">
+        select id,pictureUrl from db_darktalk.picture ${ew.customSqlSegment}
+    </select>
+
+</mapper>
