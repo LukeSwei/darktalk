@@ -6,10 +6,10 @@
 
     <resultMap id="BaseResultMap" type="com.luke.darktalk.model.domain.Message">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="from" column="from" jdbcType="INTEGER"/>
-            <result property="to" column="to" jdbcType="INTEGER"/>
+            <result property="fromId" column="from" jdbcType="INTEGER"/>
+            <result property="toId" column="to" jdbcType="INTEGER"/>
             <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="position" column="position" jdbcType="CHAR"/>
+<!--            <result property="position" column="position" jdbcType="CHAR"/>-->
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
