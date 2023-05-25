@@ -25,6 +25,7 @@ import com.luke.darktalk.utils.JwtUtils;
 import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -33,6 +34,8 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -348,6 +351,51 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return  ResultUtils.error(ErrorCode.SYSTEM_ERROR,"修改密码失败！");
         }
         return ResultUtils.success("密码修改成功");
+    }
+
+    @Override
+    public BaseResponse sign(HttpServletRequest request) {
+        User loginUser = this.getLoginUser(request);
+        String userAccount = loginUser.getUserAccount();
+        LocalDateTime now = LocalDateTime.now();
+        String keySuffix = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String key =  RedisConstant.USER_SIGN_KEY+userAccount+keySuffix;
+        int dayOfMonth = now.getDayOfMonth();
+        redisTemplate.opsForValue().setBit(key,dayOfMonth-1,true);
+        return ResultUtils.success(null,"签到成功！");
+    }
+
+    @Override
+    public BaseResponse signCount(HttpServletRequest request) {
+        User loginUser = this.getLoginUser(request);
+        LocalDateTime now = LocalDateTime.now();
+        String keySuffix = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String key = RedisConstant.USER_SIGN_KEY+loginUser.getUserAccount()+keySuffix;
+        int dayOfMonth = now.getDayOfMonth();
+        List<Long> result = redisTemplate.opsForValue().bitField(
+                key, BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0)
+        );
+        if (result == null || result.isEmpty()) {
+            return ResultUtils.success(0);
+        }
+        Long num = result.get(0);
+        if (num == null || num == 0) {
+            return ResultUtils.success(0);
+        }
+        //6. 循环遍历
+        int count = 0;
+        while (true) {
+            //6.1 让这个数字与1 做与运算，得到数字的最后一个bit位 判断这个数字是否为0
+            if ((num & 1) == 0) {
+                //如果为0，签到结束
+                break;
+            } else {
+                count ++;
+            }
+            num >>>= 1;
+        }
+        return ResultUtils.success(count);
+
     }
 
 }

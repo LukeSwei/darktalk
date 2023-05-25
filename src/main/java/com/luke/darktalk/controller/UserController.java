@@ -249,5 +249,15 @@ public class UserController {
         return ResultUtils.success(userService.matchUsers(num, user));
     }
 
+    @GetMapping("/sign")
+    @ApiOperation(value = "用户签到",tags = "用户签到")
+    public BaseResponse userSign(HttpServletRequest request){
+       return userService.sign(request);
+    }
+
+    @GetMapping("/sign/count")
+    public BaseResponse userSignCount(HttpServletRequest request){
+        return userService.signCount(request);
+    }
 
 }

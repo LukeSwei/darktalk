@@ -15,4 +15,6 @@ public interface RedisConstant {
     String REDIS_USER_RECOMMEND = "darktalk:user:recommend:";
 
     String LOGIN_VERIFY_CODE = "login:verify:code:";
+
+    String USER_SIGN_KEY = "user:sign:";
 }

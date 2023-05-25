@@ -23,6 +23,10 @@ public class RedissonConfig {
 
     private String port;
 
+    private String password;
+
+    private int database;
+
     /**
      * redisson客户端
      *
@@ -33,7 +37,7 @@ public class RedissonConfig {
         // 1. Create config object
         Config config = new Config();
         String redisAddress = String.format("redis://%s:%s",host,port);
-        config.useSingleServer().setAddress(redisAddress).setDatabase(3);
+        config.useSingleServer().setAddress(redisAddress).setDatabase(database).setPassword(password);
         RedissonClient redisson = Redisson.create(config);
         return redisson;
     }

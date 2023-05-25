@@ -58,9 +58,10 @@ spring:
     store-type: redis
   #redis配置
   redis:
-    database: 0
+    database: 3
     port: 6379
-    host: localhost
+    host: 192.168.56.128
+    password: 123456
 server:
   port: 8081
   servlet:

@@ -65,4 +65,20 @@ public interface UserService extends IService<User> {
     List<User> matchUsers(long num, User user);
 
     BaseResponse changePwd(UserForgetDto dto);
+
+    /**
+     * 用户签到
+     *
+     * @param request 请求
+     * @return {@code BaseResponse}
+     */
+    BaseResponse sign(HttpServletRequest request);
+
+    /**
+     * 签到统计
+     *
+     * @param request 请求
+     * @return {@code BaseResponse}
+     */
+    BaseResponse signCount(HttpServletRequest request);
 }
