@@ -19,6 +19,11 @@ public class BusinessException extends RuntimeException {
         this.description = description;
     }
 
+    /**
+     * 业务异常
+     *
+     * @param errorCode 错误代码
+     */
     public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.code = errorCode.getCode();

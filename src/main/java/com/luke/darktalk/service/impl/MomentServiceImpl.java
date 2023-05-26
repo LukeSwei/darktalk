@@ -1,6 +1,5 @@
 package com.luke.darktalk.service.impl;
 
-import cn.xuyanwu.spring.file.storage.FileInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -8,23 +7,25 @@ import com.github.pagehelper.PageInfo;
 import com.luke.darktalk.common.BaseResponse;
 import com.luke.darktalk.common.ErrorCode;
 import com.luke.darktalk.common.ResultUtils;
+import com.luke.darktalk.contant.CommonConstant;
 import com.luke.darktalk.mapper.PictureMapper;
 import com.luke.darktalk.model.domain.Moment;
 import com.luke.darktalk.model.domain.Picture;
+import com.luke.darktalk.model.domain.User;
 import com.luke.darktalk.model.dto.MomentDto;
 import com.luke.darktalk.model.vo.PictureVo;
 import com.luke.darktalk.service.MomentService;
 import com.luke.darktalk.mapper.MomentMapper;
 import com.luke.darktalk.service.PictureService;
+import com.luke.darktalk.service.UserService;
 import com.luke.darktalk.strategy.StorageService;
-import com.luke.darktalk.strategy.StorageStrategy;
-import com.luke.darktalk.utils.QiniuUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,18 +49,24 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
     @Resource
     private PictureMapper pictureMapper;
 
+    @Resource
+    private UserService userService;
+
     @Override
     @Transactional
-    public BaseResponse saveMoment(Moment moment) {
+    public BaseResponse saveMoment(Moment moment, HttpServletRequest request) {
         int momentId = momentMapper.insert(moment);
         MultipartFile[] files = moment.getFiles();
         Picture picture = new Picture();
         picture.setMomentId(momentId);
         picture.setUserId(moment.getUserId());
         ArrayList<Picture> list = new ArrayList<>();
+        User user = userService.getLoginUser(request);
+        StringBuffer path = new StringBuffer();
+        path.append("post").append(CommonConstant.FILE_SEPARATOR).append(user.getUserAccount());
         if(null!= files && files.length > 0){
             for (int i = 0; i < files.length; i++){
-                String url = storageService.uploadFile(files[i],files[i].getName(),"qiniu");
+                String url = storageService.uploadFile(files[i],files[i].getName(),"qiniu", String.valueOf(path));
                 picture.setPictureUrl(url);
                 list.add(picture);
             }

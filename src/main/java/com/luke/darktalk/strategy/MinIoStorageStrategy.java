@@ -1,6 +1,8 @@
 package com.luke.darktalk.strategy;
 
+import com.luke.darktalk.common.ErrorCode;
 import com.luke.darktalk.config.MinIoConfig;
+import com.luke.darktalk.contant.CommonConstant;
 import com.luke.darktalk.exception.BusinessException;
 import com.luke.darktalk.utils.MinIoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,27 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Component
 public class MinIoStorageStrategy implements StorageStrategy {
+
+
+    @Autowired
+    private MinIoConfig minIoConfig;
     @Override
-    public String uploadFile(MultipartFile file, String fileName) {
-        return null;
+    public String uploadFile(MultipartFile file, String fileName,String path) {
+        try {
+            MinIoUtils.uploadFile(minIoConfig.getBucketName(),
+                    fileName,
+                    file.getInputStream(),path);
+            String imgUrl = minIoConfig.getFileHost()
+                    + CommonConstant.FILE_SEPARATOR
+                    + minIoConfig.getBucketName()
+                    + CommonConstant.FILE_SEPARATOR
+                    + path
+                    + CommonConstant.FILE_SEPARATOR
+                    + fileName;
+            return imgUrl;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -27,7 +47,11 @@ public class MinIoStorageStrategy implements StorageStrategy {
 
     @Override
     public void deleteFile(String fileName) {
-
+        try {
+            MinIoUtils.removeFile(minIoConfig.getBucketName(),fileName);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"Minio存储策略中无法找到文件");
+        }
     }
 
     @Override

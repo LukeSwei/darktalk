@@ -17,7 +17,7 @@ public interface StorageStrategy {
      * @param fileName 文件名称
      * @return {@code String}
      */
-    String uploadFile(MultipartFile file, String fileName);
+    String uploadFile(MultipartFile file, String fileName,String path);
 
     /**
      * 下载文件

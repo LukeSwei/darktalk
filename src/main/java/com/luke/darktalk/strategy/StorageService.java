@@ -20,10 +20,10 @@ public class StorageService {
         this.storageStrategyFactory = storageStrategyFactory;
     }
 
-    public String uploadFile(MultipartFile file, String fileName, String platformName) {
+    public String uploadFile(MultipartFile file, String fileName, String platformName,String path) {
         StorageStrategy storageStrategy = storageStrategyFactory.getStorageStrategy(platformName);
         if (storageStrategy != null) {
-            return storageStrategy.uploadFile(file, fileName);
+            return storageStrategy.uploadFile(file, fileName,path);
         }
         return null;
     }

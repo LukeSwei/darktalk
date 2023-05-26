@@ -27,8 +27,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/user/registry","/user/verify","/user/forgetPwd","/user/login","/user/changePwd",
                         "/test/**",
-                        "/swagger-ui/**","/doc.html/**","/favicon.ico","/webjars/**","/swagger-resources/**","/v2/**");
-//                .excludePathPatterns("/**");
+                        "/swagger-ui/**","/doc.html/**","/favicon.ico","/webjars/**","/swagger-resources/**","/v2/**")
+                .excludePathPatterns("/**");
     }
 
     @Override

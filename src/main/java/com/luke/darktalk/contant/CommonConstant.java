@@ -9,6 +9,11 @@ package com.luke.darktalk.contant;
 public interface CommonConstant {
 
     /**
+     * 文件分隔符
+     */
+    String FILE_SEPARATOR = "/";
+
+    /**
      * 已删除
      */
     int DELETE_TRUE = 1;

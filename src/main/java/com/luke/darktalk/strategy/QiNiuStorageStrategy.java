@@ -1,15 +1,9 @@
 package com.luke.darktalk.strategy;
 
-import cn.xuyanwu.spring.file.storage.FileInfo;
-import cn.xuyanwu.spring.file.storage.FileStorageService;
-import com.luke.darktalk.common.ErrorCode;
-import com.luke.darktalk.exception.BusinessException;
-import com.luke.darktalk.utils.QiniuUtil;
+import com.luke.darktalk.utils.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.annotation.Resource;
 
 /**
  * 七牛云存储策略
@@ -21,12 +15,12 @@ import javax.annotation.Resource;
 public class QiNiuStorageStrategy implements StorageStrategy {
 
     @Autowired
-    private QiniuUtil qiniuUtil;
+    private QiniuUtils qiniuUtils;
 
 
     @Override
-    public String uploadFile(MultipartFile file, String fileName) {
-        String url = qiniuUtil.uploadFile(file, fileName);
+    public String uploadFile(MultipartFile file, String fileName,String path) {
+        String url = qiniuUtils.uploadFile(file, fileName);
 
         return url;
     }
@@ -38,7 +32,7 @@ public class QiNiuStorageStrategy implements StorageStrategy {
 
     @Override
     public void deleteFile(String fileName) {
-
+        qiniuUtils.deleteFile(fileName);
     }
 
     @Override

@@ -60,16 +60,8 @@ public class TestController {
     public BaseResponse upload(@RequestParam("file") MultipartFile file) throws Exception {
 
         String fileName = file.getOriginalFilename();
-        String imgUrl = storageService.uploadFile(file, fileName, "qiniu");
-//        MinIoUtils.uploadFile(minIoConfig.getBucketName(),
-//                              fileName,
-//                              file.getInputStream());
-//
-//        String imgUrl = minIoConfig.getFileHost()
-//                        + "/"
-//                        + minIoConfig.getBucketName()
-//                        + "/"
-//                        + fileName;
+        String imgUrl = storageService.uploadFile(file, fileName, "minio","test");
+
 
         return ResultUtils.success(imgUrl);
     }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -21,7 +20,7 @@ import java.util.Random;
  * @date 2023/05/21
  */
 @Component
-public class QiniuUtil {
+public class QiniuUtils {
     @Value("${qiniu.accessKey}")
     private String accessKey;
 
